@@ -11,7 +11,7 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
       minLength: 2,
-      maxLength: 500,
+      maxLength: 3000,
       trim: true,
     },
     likes: [

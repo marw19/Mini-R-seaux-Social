@@ -12,6 +12,4 @@ export interface User {
   lastName: string; // Nom de l'utilisateur
   email: string; // Adresse e-mail de l'utilisateur
   role: Role; // Rôle de l'utilisateur
-  profileImage?: string; // Chemin ou URL de l'image de profil (facultatif)
-  profileImageUrl?: string; // URL complète de l'image (facultatif, générée dynamiquement dans le frontend)
 }

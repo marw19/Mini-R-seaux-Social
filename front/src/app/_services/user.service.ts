@@ -10,14 +10,7 @@ import { throwError } from "rxjs";
   providedIn: "root",
 })
 export class UserService {
-  private apiUrl = "http://api.geonames.org";
   private _userURL = `${environment.baseUrl}/users`;
-  private profileImageSubject = new BehaviorSubject<string>(
-    'https://www.w3schools.com/w3css/img_avatar3.png' // Image par défaut
-  );
-  profileImage$ = this.profileImageSubject.asObservable();
-
-  
   constructor(private http: HttpClient) {}
   stayConnected(email: string): Observable<User> {
     return this.http.get<User>(`${this._userURL}/stayConnected/${email}`);

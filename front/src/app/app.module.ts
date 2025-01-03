@@ -25,6 +25,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { SortPipe } from './_helpers/sort.pipe';
 import { InscriptionComponent } from './components/inscription/inscription.component';
 import { HomeComponent } from './components/home/home.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -49,6 +50,7 @@ import { HomeComponent } from './components/home/home.component';
       color: '#0e309f',
     }),
     HttpClientModule,
+    NgbModule,
     AngularEditorModule,
     NgxIntlTelInputModule,
     RecaptchaV3Module,

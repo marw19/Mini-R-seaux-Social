@@ -26,11 +26,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         if (user) {
           this.user = { ...user };
 
-          // Définir l'image par défaut si l'utilisateur est Admin
-          if (this.user.role?.type === 'admin') {
-            this.user.profileImageUrl = 'https://www.w3schools.com/w3css/img_avatar3.png';
-          } else {
-          }
         } else {
           this.user = null;
         }
@@ -40,17 +35,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
       },
     });
 
-    // S'abonner aux changements de l'image de profil
-    const profileImageSubscription = this.userService.profileImage$.subscribe({
-      next: (newImageUrl) => {
-        if (this.user?.role?.type === 'rh' || this.user?.role?.type === 'candidat') {
-          this.user.profileImageUrl = newImageUrl; // Met à jour la photo dans la navbar
-        }
-      },
-    });
+   
 
-    this.subscriptions.add(userSubscription);
-    this.subscriptions.add(profileImageSubscription);
+    this.subscriptions.add(userSubscription);;
   }
 
 

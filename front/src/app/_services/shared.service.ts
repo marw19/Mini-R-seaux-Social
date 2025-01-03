@@ -27,29 +27,6 @@ export class SharedService {
     return this.myVariable;
   }
 
-  setIdSiteSendTOBenefit(value: string): void {
-    this.idSite = value;
-  }
-  getIdSiteSended() :string{
-    return this.idSite;
-  }
-
-  setIdSiteSendTOBenefitGlass(value: string): void {
-    this.idSite_benefitGlass = value;
-  }
-  getIdSiteSendedTobenfitGlass() :string{
-    return this.idSite_benefitGlass;
-  }
-
-  setIdBenfitSendToOccurence(value: string): void {
-    this.idBenefit = value;
-  }
-  getBenfitSended() :string{
-    return this.idBenefit;
-  }
-
-
-  // hover in menu left (navigate in others pages)
   private urlSource = new BehaviorSubject<string>('');
   currentUrl = this.urlSource.asObservable();
 
@@ -57,8 +34,6 @@ export class SharedService {
     this.urlSource.next(value);
   }
 
-
-  //////
   emitSubmitEvent() {
     this.submitEvent.next();
   }

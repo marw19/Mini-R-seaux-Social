@@ -8,6 +8,7 @@ const user_router = require("./routes/users");
 const forget_passowrd = require("./routes/forgetPassword");
 const roleRouter = require("./routes/role");
 const postRouter = require("./routes/posts");
+const likeRouter = require("./routes/like");
 
 const port = process.env.PORT || process.env.port;
 const app = express();
@@ -35,5 +36,6 @@ app.use("/api/users", user_router);
 app.use("/api/forget-password", forget_passowrd);
 app.use("/api/roles", roleRouter);
 app.use("/api/posts", postRouter);
+app.use("/api/likes", likeRouter);
 
 app.listen(port, () => console.log(`Server on ${port}...`));

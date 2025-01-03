@@ -1,0 +1,95 @@
+<div
+  class="d-flex justify-content-center align-items-center vh-100 bg-light"
+  style="background-color: #1E526C !important;"
+>
+  <div class="container">
+    <div class="card bg-white shadow rounded p-5">
+      <form #f0="ngForm"[formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <h3 style="color: #0A2E40 !important" class="text-primary text-center">Inscription</h3>
+        <p class="details text-center">Bienvenue dans notre plateforme IEG</p>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Prénom <span>*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="firstName"
+              placeholder="Prénom"
+              [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
+            />
+            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+              <div *ngIf="f.firstName.errors.required">Champ obligatoire.</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Nom <span>*</span></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="lastName"
+              placeholder="Nom"
+              [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
+            />
+            <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+              <div *ngIf="f.lastName.errors.required">Champ obligatoire.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Email <span>*</span></label>
+            <input
+              type="email"
+              class="form-control"
+              formControlName="email"
+              placeholder="Email"
+              [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+            />
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              <div *ngIf="f.email.errors.required">Champ obligatoire.</div>
+              <div *ngIf="f.email.errors.email">Adresse email invalide.</div>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label class="form-label">Téléphone <span>*</span></label>
+            <ngx-intl-tel-input
+            [cssClass]="'form-control input-custom-phone'"
+            formControlName="phone"
+            [enableAutoCountrySelect]="false"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="CountryISO.Tunisia"
+            [maxLength]="8"
+            [phoneValidation]="true"
+            name="phone"
+            [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"
+          ></ngx-intl-tel-input>
+          <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+            <div *ngIf="f.phone.errors.required">Champ obligatoire.</div>
+          </div>
+          <div *ngIf="registerForm.value.phone && !f0.form.controls['phone'].invalid == false" style="color: red;">
+            Numéro de téléphone non validé <i class="bi bi-x"></i>
+        </div>
+        <div *ngIf=" registerForm.value.phone && !f0.form.controls['phone'].invalid == true" style="color: green;">
+          Numéro de téléphone  validé <i class="bi bi-check"></i>
+           </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-2">
+          <button type="submit">S'inscrire</button>
+        </div>
+
+        <div class="text-center mt-2">
+          <p routerLink="/connexion" class="mb-0 link-hover" style="cursor: pointer;">
+            Connectez-vous
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

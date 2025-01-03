@@ -1,0 +1,160 @@
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light" style="background-color: #1E526C !important;">
+<div *ngIf="verifCode == false" class="container" id="container">
+  <div class="form-container sign-in-container">
+    <form [formGroup]="registerFormCode">
+      <h4 style="color: #5c5a7e !important">Saisir le code envoyé</h4>
+      <div class="social-container">
+        <a href="/" class="social"
+          ><i
+            class="bi bi-circle-fill"
+            style="color: #1E526C; opacity: 25% !important"
+          ></i
+        ></a>
+        <a href="/" class="social"
+          ><i
+            class="bi bi-circle-fill"
+            style="color: #1E526C; opacity: 50% !important"
+          ></i
+        ></a>
+        <a href="/" class="social"
+          ><i
+            class="bi bi-circle-fill"
+            style="color: #1E526C; opacity: 100% !important"
+          ></i
+        ></a>
+      </div>
+
+      <input
+        placeholder="Code"
+        type="text"
+        formControlName="code"
+        [(ngModel)]="code"
+        onkeypress="return /[0-9]/i.test(event.key)"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': submittedVerifCode && f2.code.errors }"
+      />
+      <div
+        *ngIf="submittedVerifCode && f2.code.errors"
+        class="invalid-feedback"
+      >
+        <div *ngIf="f2.code.errors.required">Veuillez renseigner ce champ.</div>
+        <div *ngIf="f2.code.errors.maxlength">
+          Le code doit contenir 5 chiffres.
+        </div>
+      </div>
+
+      <br />
+      <br />
+      <button (click)="checkCode()" style="color: #fff">Vérifier</button>
+
+      <br />
+    </form>
+  </div>
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-right">
+        <img
+          class="img-fluid"
+          src="../../../assets/images/logo IEG.png"
+          alt=""
+          width="250px"
+          height="200px"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="verifCode == true" class="container" id="container">
+  <div class="form-container sign-in-container">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <h4 style="color: #5c5a7e !important">Changer votre mot de passe</h4>
+      <div class="social-container">
+        <a href="/" class="social"
+          ><i
+            class="bi bi-circle-fill"
+            style="color: #1E526C; opacity: 25% !important"
+          ></i
+        ></a>
+        <a href="/" class="social"
+          ><i
+            class="bi bi-circle-fill"
+            style="color: #1E526C; opacity: 50% !important"
+          ></i
+        ></a>
+        <a href="/" class="social"
+          ><i
+            class="bi bi-circle-fill"
+            style="color: #1E526C; opacity: 100% !important"
+          ></i
+        ></a>
+      </div>
+
+      <input
+        placeholder="Mot de passe"
+        type="password"
+        formControlName="newpassword"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f.newpassword.errors }"
+      />
+      <div *ngIf="submitted && f.newpassword.errors" class="invalid-feedback">
+        <div *ngIf="f.newpassword.errors.required">
+          Veuillez renseigner ce champ.
+        </div>
+        <div *ngIf="f.newpassword.errors.pattern">
+          Le Mot de passe de avoir au moinns 8 caractéres telque au moins un
+          lettre minuscule et Lettre majuscule et un chiffre.
+        </div>
+        <!-- <div *ngIf="f.newpassword.errors.pattern">
+          Merci de saisir une adresse email valide.
+        </div> -->
+      </div>
+
+      <input
+        placeholder="Confirmez le mot de passe"
+        type="password"
+        formControlName="confirmpassword"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f.confirmpassword.errors }"
+      />
+      <div
+        *ngIf="submitted && f.confirmpassword.errors"
+        class="invalid-feedback"
+      >
+        <div *ngIf="f.confirmpassword.errors.required">
+          Veuillez renseigner ce champ.
+        </div>
+        <div *ngIf="f.confirmpassword.errors.pattern">
+          Le Mot de passe de avoir au moinns 8 caractéres telque au moins un
+          lettre minuscule et Lettre majuscule et un chiffre
+        </div>
+        <div *ngIf="f.confirmpassword.errors.mustMatch">
+          Le nouveau de passe et la confirmation ne sont pas les memes.
+        </div>
+      </div>
+      <div></div>
+      <br />
+      <br />
+      <button style="color: #fff">Changer</button>
+
+      <br />
+    </form>
+  </div>
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-right">
+        <img
+          class="img-fluid"
+          src="../../../assets/images/logo IEG.png"
+          alt=""
+          width="250px"
+          height="200px"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+/>

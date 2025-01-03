@@ -1,0 +1,74 @@
+<app-navbar></app-navbar>
+
+<!-- Conteneur principal pour la page -->
+<div class="home-container">
+  <br />
+  <div class="container">
+    <!-- Card pour démarrer un post -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <textarea
+          class="form-control"
+          rows="2"
+          placeholder="Commencer un post"
+          data-bs-toggle="modal"
+          data-bs-target="#postModal"
+          readonly
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Exemple de post publié -->
+    <div class="card mb-3">
+      <div class="card-body">
+        <p class="card-text">Ceci est un exemple de post publié.</p>
+        <hr />
+        <div class="d-flex justify-content-around text-muted">
+          <!-- Bouton Like -->
+          <button class="btn action-btn d-flex align-items-center">
+            <span class="me-1">👍</span> <span>Like</span>
+          </button>
+          <!-- Bouton Commenter -->
+          <button class="btn action-btn d-flex align-items-center">
+            <span class="me-1">💬</span> <span>Commenter</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal pour rédiger un post -->
+<div
+  class="modal fade"
+  id="postModal"
+  tabindex="-1"
+  aria-labelledby="postModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- Bouton de fermeture avec Bootstrap 5 -->
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <textarea
+          #autoResizeTextarea
+          class="form-control"
+          rows="1"
+          placeholder="Qu'avez-vous en tête ?"
+          (input)="autoResize(autoResizeTextarea)"
+        ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Publier</button>
+      </div>
+    </div>
+  </div>
+</div>

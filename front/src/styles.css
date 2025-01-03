@@ -1,0 +1,10 @@
+.form-control:focus {
+  border-color: #62b9cb !important;
+  box-shadow: 0 0 0 .2rem rgba(193, 235, 255, 0.879) !important;
+}
+.text-capitalize{
+  text-transform: capitalize;
+}
+.text-uppercase{
+  text-transform: uppercase;
+}

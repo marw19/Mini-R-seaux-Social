@@ -1,0 +1,43 @@
+.home-container {
+    background: #d6d6d6;
+    min-height: 100vh; /* Pour couvrir toute la hauteur de la page */
+  }
+.modal-header{
+    border-bottom: none !important;
+}
+.modal-footer{
+    border-top: none !important;
+}
+textarea[readonly] {
+    cursor: pointer;
+    background-color: #f8f9fa;
+  }
+/* Style des boutons d'action */
+.action-btn {
+    background-color: transparent;
+    border: none;
+    color: #65676b; /* Couleur grisée par défaut comme LinkedIn */
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espacement entre l'emoji et le texte */
+    cursor: pointer;
+  }
+  
+  .action-btn:hover {
+    color: #0a66c2; /* Couleur bleue sur survol */
+    background-color: rgba(112, 181, 249, 0.2); /* Effet d'arrière-plan léger */
+    border-radius: 5px; /* Adoucit les coins pour un effet moderne */
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  .action-btn:focus {
+    outline: none;
+  }
+  
+  /* Espacement uniforme entre les actions */
+  .card-body .d-flex {
+    margin-top: 10px;
+  }
+  

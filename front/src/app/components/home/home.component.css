@@ -40,4 +40,17 @@ textarea[readonly] {
   .card-body .d-flex {
     margin-top: 10px;
   }
+  .avatar-img {
+    width: 40px; /* Taille de l'avatar */
+    height: 40px;
+    object-fit: cover; /* Assurez-vous que l'image de l'avatar est bien cadrée */
+  }
   
+  .action-btn {
+    border: none;
+    background: none;
+  }
+  
+  .action-btn:hover {
+    color: #0073b1; /* Couleur d'hover similaire à LinkedIn */
+  }

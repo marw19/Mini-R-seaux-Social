@@ -37,7 +37,7 @@ router.get('/allPosts', verifyToken, async (req, res) => {
     const posts = await Post.find()
       .populate('userId', 'firstName lastName')
       .populate('likes') 
-      // .populate('comments') // Si vous voulez récupérer les informations des commentaires
+      .populate('comments') // Si vous voulez récupérer les informations des commentaires
       .sort({ createdAt: -1 }); // Trier les posts par date décroissante (les plus récents en premier)
 
     res.status(200).send({ posts });

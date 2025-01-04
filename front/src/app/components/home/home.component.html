@@ -71,13 +71,14 @@
           </button>
     
           <!-- Bouton Commenter -->
-          <button class="btn action-btn d-flex align-items-center">
+          <button class="btn action-btn d-flex align-items-center" (click)="showComments(post)">
             <span class="me-1">💬</span>
-            <span>Commenter</span>
+            <span>{{ post.commentsCount }} Comment{{ post.commentsCount > 1 ? 's' : '' }}</span>
           </button>
         </div>
       </div>
     </div>
+    
     <br>
     
   </div>

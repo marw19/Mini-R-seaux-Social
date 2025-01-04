@@ -26,6 +26,7 @@ import { SortPipe } from './_helpers/sort.pipe';
 import { InscriptionComponent } from './components/inscription/inscription.component';
 import { HomeComponent } from './components/home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FooterComponent } from './_shared/footer/footer.component';
 
 
 
@@ -42,6 +43,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NavbarComponent,
     SortPipe,
     HomeComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,12 @@
+footer {
+    background-color: #d6d6d6; /* Couleur de fond claire */
+    padding: 10px 0; /* Espacement vertical */
+    font-size: 1rem; /* Taille de police */
+    color: #6c757d; /* Texte en gris */
+    margin-top: auto; /* Assure que le footer reste collé en bas */
+    text-align: center;
+}
+
+footer hr {
+    border-color: #ccc; /* Couleur des lignes */
+}

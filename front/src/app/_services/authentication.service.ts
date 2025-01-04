@@ -30,6 +30,10 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
+  public getCurrentUserId(): string | null {
+    const currentUser = this.currentUserValue;
+    return currentUser ? currentUser._id : null; // Retourne l'ID de l'utilisateur ou null si aucun utilisateur
+  }
   // Connexion utilisateur
   loginUser(user: { email: string; password: string }): Observable<any> {
     return this.http.post(`${this._authenticationURL}/login`, user).pipe(

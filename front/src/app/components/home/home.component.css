@@ -54,3 +54,18 @@ textarea[readonly] {
   .action-btn:hover {
     color: #0073b1; /* Couleur d'hover similaire à LinkedIn */
   }
+/* Emoji gris par défaut */
+.like-outline {
+  color: #888; /* Gris */
+}
+
+/* Emoji bleu lorsque aimé */
+.like-liked {
+  color: #007bff; /* Bleu */
+}
+
+/* Optionnel : ajouter une animation ou un effet lors du clic */
+.like-outline:hover, .like-liked:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}

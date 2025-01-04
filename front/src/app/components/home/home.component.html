@@ -23,11 +23,13 @@
         <!-- Avatar et nom de l'utilisateur en ligne -->
         <div class="d-flex align-items-center mb-3">
           <div class="avatar-container me-3">
-            <!-- Avatar -->
-            <img src="https://www.w3schools.com/w3images/avatar2.png" alt="User Avatar" class="avatar-img rounded-circle" />
+            <img
+              src="https://www.w3schools.com/w3images/avatar2.png"
+              alt="User Avatar"
+              class="avatar-img rounded-circle"
+            />
           </div>
           <div>
-            <!-- Nom de l'utilisateur (prénom et nom) -->
             <span class="fw-bold">{{ post.userId.firstName }} {{ post.userId.lastName }}</span>
           </div>
         </div>
@@ -35,32 +37,49 @@
         <!-- Contenu du post -->
         <div class="post-content">
           <p class="card-text">
-            <!-- Afficher le texte complet si 'isExpanded' est vrai, sinon tronquer à 700 caractères -->
             {{ post.isExpanded ? post.content : (post.content.length > 700 ? post.content.substring(0, 700) : post.content) }}
-            
-            <!-- Si le contenu dépasse 700 caractères et que le texte n'est pas expansé, afficher "Voir plus" -->
-            <button *ngIf="post.content.length > 700 && !post.isExpanded" 
-                    class="btn btn-link p-0" 
-                    (click)="toggleExpand(post)">
+            <button
+              *ngIf="post.content.length > 700 && !post.isExpanded"
+              class="btn btn-link p-0"
+              (click)="toggleExpand(post)"
+            >
               Voir plus
             </button>
           </p>
         </div>
     
-        <!-- Actions sous le post (like, commenter) -->
         <hr />
-        <div class="d-flex justify-content-between text-muted">
+    
+        <!-- Actions sous le post (like, commenter) -->
+        <div class="d-flex text-muted">
           <!-- Bouton Like -->
-          <button class="btn action-btn d-flex align-items-center">
-            <span class="me-1">👍</span> <span>Like</span>
+          <button
+            class="btn action-btn d-flex align-items-center"
+            (click)="likePost(post)"
+          >
+            <!-- Icône Like (bleu ou gris) -->
+            <i
+              class="bi"
+              [ngClass]="{
+                'bi-hand-thumbs-up': !post.isLiked,
+                'bi-hand-thumbs-up-fill text-primary': post.isLiked
+              }"
+            ></i>
+            <span>
+              {{ post.likesCount }} Like{{ post.likesCount > 1 ? 's' : '' }}
+            </span>
           </button>
+    
           <!-- Bouton Commenter -->
           <button class="btn action-btn d-flex align-items-center">
-            <span class="me-1">💬</span> <span>Commenter</span>
+            <span class="me-1">💬</span>
+            <span>Commenter</span>
           </button>
         </div>
       </div>
     </div>
+    
+    
   </div>
 </div>
 

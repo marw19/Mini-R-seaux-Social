@@ -2,6 +2,8 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PostService } from 'src/app/_services/post.service';
 import iziToast from 'izitoast';
+import { LikesService } from 'src/app/_services/likes.service';
+import { AuthenticationService } from 'src/app/_services/authentication.service';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +16,12 @@ export class HomeComponent implements OnInit {
   content: string = '';
   currentModal: any;
 
-  constructor(private postService: PostService, private modalService: NgbModal) { }
+  constructor(
+    private postService: PostService,
+    private likeService: LikesService ,
+    private authService: AuthenticationService,
+    private modalService: NgbModal
+  ) { }
 
   ngOnInit(): void {
     this.loadPosts();
@@ -23,10 +30,14 @@ export class HomeComponent implements OnInit {
   loadPosts(): void {
     this.postService.getPosts().subscribe(
       (response) => {
-        // Ajoute un champ 'isExpanded' pour chaque post
+        // Récupérer l'ID de l'utilisateur connecté
+        const currentUserId = this.getCurrentUserId(); // Par exemple, depuis un service d'authentification
+        
+        // Ajoute un champ 'isExpanded' et 'isLiked' pour chaque post
         this.posts = response.posts.map(post => ({
           ...post,
-          isExpanded: false 
+          isExpanded: false,
+          isLiked: post.likes && post.likes.includes(currentUserId) // Vérifier si l'utilisateur a liké ce post
         }));
       },
       (error) => {
@@ -34,14 +45,17 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+  
+  getCurrentUserId(): string {
+    return this.authService.getCurrentUserId();
+  }
 
   toggleExpand(post: any): void {
     // Inverse l'état 'isExpanded' pour afficher ou cacher le texte complet
     post.isExpanded = !post.isExpanded;
   }
 
-  addPost(): void {
-    
+  addPost(modal?: any): void {
     if (this.content.length > 3000) {
       iziToast.error({
         title: 'Erreur',
@@ -74,8 +88,8 @@ export class HomeComponent implements OnInit {
         this.content = ''; // Réinitialiser le contenu du post
   
         // Fermer le modal après l'ajout
-        if (this.currentModal) {
-          this.currentModal.close();
+        if (modal) {
+          modal.close();
         }
       },
       (error) => {
@@ -90,6 +104,7 @@ export class HomeComponent implements OnInit {
     );
   }
   
+
   openPostModal(postModal: TemplateRef<any>): void {
     this.currentModal = this.modalService.open(postModal, {
       ariaLabelledBy: 'postModalLabel',
@@ -102,8 +117,31 @@ export class HomeComponent implements OnInit {
     // Ajuster la hauteur en fonction du contenu
     textarea.style.height = `${textarea.scrollHeight}px`;
   }
-   // Vérifie si le texte doit être tronqué
-   isTruncated(content: string): boolean {
+
+  // Fonction pour liker un post
+  likePost(post: any): void {
+    const postId = post._id;
+    
+    // Appel du service pour toggle le like
+    this.likeService.toggleLike(postId).subscribe(
+      (response) => {
+        // Mettre à jour l'état du post avec la réponse du backend
+        post.isLiked = response.isLiked; // Si true, le like est activé, sinon désactivé
+        post.likesCount = response.likesCount; // Mettre à jour le nombre de likes
+      },
+      (error) => {
+        console.error('Erreur lors du like du post', error);
+        iziToast.error({
+          title: 'Erreur',
+          message: 'Erreur lors du like du post',
+          position: 'topRight',
+        });
+      }
+    );
+  }
+  
+  // Vérifie si le texte doit être tronqué
+  isTruncated(content: string): boolean {
     return content.length > 3000;
   }
 
@@ -111,5 +149,4 @@ export class HomeComponent implements OnInit {
   toggleTruncate(post: any): void {
     post.isTruncated = !post.isTruncated;
   }
-
 }

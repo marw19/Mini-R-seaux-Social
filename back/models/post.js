@@ -29,7 +29,11 @@ const postSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Comment",
       },
-    ], // Liste des commentaires
+    ], 
+    commentsCount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

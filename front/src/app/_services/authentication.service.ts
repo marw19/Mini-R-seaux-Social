@@ -34,6 +34,16 @@ export class AuthenticationService {
     const currentUser = this.currentUserValue;
     return currentUser ? currentUser._id : null; // Retourne l'ID de l'utilisateur ou null si aucun utilisateur
   }
+  public getCurrentUserFirstName(): string | null {
+    const currentUser = this.currentUserValue;
+    return currentUser ? currentUser.firstName : null; // Retourne le prénom ou null si aucun utilisateur
+  }
+  
+  // Récupérer le nom de famille de l'utilisateur
+  public getCurrentUserLastName(): string | null {
+    const currentUser = this.currentUserValue;
+    return currentUser ? currentUser.lastName : null; // Retourne le nom de famille ou null si aucun utilisateur
+  }
   // Connexion utilisateur
   loginUser(user: { email: string; password: string }): Observable<any> {
     return this.http.post(`${this._authenticationURL}/login`, user).pipe(

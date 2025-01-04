@@ -4,6 +4,7 @@ import { PostService } from 'src/app/_services/post.service';
 import iziToast from 'izitoast';
 import { LikesService } from 'src/app/_services/likes.service';
 import { AuthenticationService } from 'src/app/_services/authentication.service';
+import { CommentService } from 'src/app/_services/comment.service';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,7 @@ import { AuthenticationService } from 'src/app/_services/authentication.service'
 export class HomeComponent implements OnInit {
 
   posts: any[] = [];
+  comments: any[] = [];
   content: string = '';
   currentModal: any;
 
@@ -20,6 +22,7 @@ export class HomeComponent implements OnInit {
     private postService: PostService,
     private likeService: LikesService ,
     private authService: AuthenticationService,
+    private commentService: CommentService,
     private modalService: NgbModal
   ) { }
 
@@ -37,6 +40,9 @@ export class HomeComponent implements OnInit {
         this.posts = response.posts.map(post => ({
           ...post,
           isExpanded: false,
+          isCommenting: false,
+          commentText: '',
+          comments: [],
           isLiked: post.likes && post.likes.includes(currentUserId) // Vérifier si l'utilisateur a liké ce post
         }));
       },
@@ -45,6 +51,20 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+
+  loadComments(post: any): void {
+    this.commentService.getComments(post._id).subscribe(
+      (response) => {
+        post.comments = response.comments || [];
+        post.commentsCount = post.comments.length || 0;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des commentaires', error);
+      }
+    );
+  }
+  
+  
   
   getCurrentUserId(): string {
     return this.authService.getCurrentUserId();
@@ -53,6 +73,24 @@ export class HomeComponent implements OnInit {
   toggleExpand(post: any): void {
     // Inverse l'état 'isExpanded' pour afficher ou cacher le texte complet
     post.isExpanded = !post.isExpanded;
+  }
+
+  toggleCommentBox(post: any): void {
+    // Si on clique pour afficher/masquer les commentaires
+    post.areCommentsVisible = !post.areCommentsVisible;
+  
+    // Si on ouvre le champ de commentaire, on charge les commentaires
+    if (!post.isCommenting) {
+      post.isCommenting = true;
+      this.loadComments(post);
+    }
+  }
+  
+  
+
+  onCommentInput(post: any): void {
+    // Toggle the "Publier" button visibility based on content length
+    post.isCommenting = post.commentText.length > 0;
   }
 
   addPost(modal?: any): void {
@@ -104,6 +142,43 @@ export class HomeComponent implements OnInit {
     );
   }
   
+  addComment(post: any): void {
+    const commentContent = post.commentText;
+    if (commentContent.trim()) {
+      this.commentService.addComment(post._id, commentContent).subscribe(
+        (response) => {
+          iziToast.success({
+            title: 'Succès',
+            message: 'Commentaire ajouté avec succès.',
+            position: 'topRight',
+          });
+          post.commentText = ''; // Réinitialiser le champ de saisie du commentaire
+          post.isCommenting = false; // Masquer le champ de commentaire
+  
+          // Ajouter le commentaire directement dans le tableau des commentaires du post
+          const newComment = {
+            userId: {
+              firstName: this.authService.getCurrentUserFirstName(),
+              lastName: this.authService.getCurrentUserLastName(),
+            },
+            content: commentContent,
+            createdAt: new Date().toISOString(),
+          };
+          post.comments.unshift(newComment); // Ajoute le commentaire en haut de la liste
+          post.commentsCount = post.comments.length; // Mettre à jour le nombre de commentaires
+        },
+        (error) => {
+          console.error('Erreur lors de l\'ajout du commentaire', error);
+          iziToast.error({
+            title: 'Erreur',
+            message: 'Erreur lors de l\'ajout du commentaire.',
+            position: 'topRight',
+          });
+        }
+      );
+    }
+  }
+  
 
   openPostModal(postModal: TemplateRef<any>): void {
     this.currentModal = this.modalService.open(postModal, {
@@ -149,4 +224,26 @@ export class HomeComponent implements OnInit {
   toggleTruncate(post: any): void {
     post.isTruncated = !post.isTruncated;
   }
+
+  getTimeAgo(date: string): string {
+    const now = new Date();
+    const commentDate = new Date(date);
+    const timeDiff = Math.abs(now.getTime() - commentDate.getTime());
+    const seconds = Math.floor(timeDiff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+      return `${days} jour${days > 1 ? 's' : ''} passé`;
+    } else if (hours > 0) {
+      return `${hours} heure${hours > 1 ? 's' : ''} passé`;
+    } else if (minutes > 0) {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} passé`;
+    } else {
+      return `${seconds} seconde${seconds > 1 ? 's' : ''} passé`;
+    }
+  }
+
+  
 }

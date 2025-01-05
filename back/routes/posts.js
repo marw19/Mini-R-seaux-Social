@@ -12,7 +12,6 @@ router.post('/', verifyToken, async (req, res) => {
     }
 
     // Vérifiez si req.user contient userId
-    console.log(req.user); // Assurez-vous que req.user contient userId
     if (!req.user || !req.user.userId) {
       return res.status(400).send({ message: 'User ID manquant dans le token.' });
     }

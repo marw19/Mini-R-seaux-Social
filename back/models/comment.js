@@ -22,7 +22,7 @@ const commentSchema = new mongoose.Schema(
     parentComment: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment", 
-      default: null,
+      default: null,  // Utilisé pour les réponses
     },
     replies: [
       {

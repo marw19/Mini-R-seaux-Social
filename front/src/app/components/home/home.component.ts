@@ -39,6 +39,7 @@ export class HomeComponent implements OnInit {
         // Ajoute un champ 'isExpanded' et 'isLiked' pour chaque post
         this.posts = response.posts.map(post => ({
           ...post,
+          content: post.content || '',
           isExpanded: false,
           isCommenting: false,
           commentText: '',
@@ -57,12 +58,37 @@ export class HomeComponent implements OnInit {
       (response) => {
         post.comments = response.comments || [];
         post.commentsCount = post.comments.length || 0;
+      
+        // Charger les réponses pour chaque commentaire
+        post.comments.forEach(comment => {
+          this.loadReplies(post._id, comment);
+        });
+      
+        // Recalculez le nombre total de commentaires et réponses
+        post.totalCommentsCount = post.commentsCount + post.comments.reduce((sum, comment) => sum + (comment.replies ? comment.replies.length : 0), 0);
       },
       (error) => {
         console.error('Erreur lors de la récupération des commentaires', error);
       }
     );
   }
+  
+  
+  
+  loadReplies(postId: string, comment: any): void {
+    this.commentService.getReplies(postId, comment._id).subscribe(
+      (response) => {
+        console.log(response);  // Vérifiez la réponse ici
+        comment.replies = response.replies || [];
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des réponses', error);
+      }
+    );
+  }
+  
+  
+  
   
   
   
@@ -165,7 +191,15 @@ export class HomeComponent implements OnInit {
             createdAt: new Date().toISOString(),
           };
           post.comments.unshift(newComment); // Ajoute le commentaire en haut de la liste
+          
+          // Mettre à jour le nombre de commentaires
           post.commentsCount = post.comments.length; // Mettre à jour le nombre de commentaires
+  
+          // Recalculer le nombre total de commentaires et de réponses
+          post.totalCommentsCount = post.commentsCount + post.comments.reduce(
+            (sum, comment) => sum + (comment.replies ? comment.replies.length : 0),
+            0
+          ); // Recalcule le nombre total de commentaires (commentaires + réponses)
         },
         (error) => {
           console.error('Erreur lors de l\'ajout du commentaire', error);
@@ -178,6 +212,8 @@ export class HomeComponent implements OnInit {
       );
     }
   }
+
+  
   
 
   openPostModal(postModal: TemplateRef<any>): void {
@@ -245,5 +281,72 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  addReply(comment: any): void {
+    const replyContent = comment.replyText;
+    if (replyContent.trim()) {
+      const postId = comment.postId;
+      const commentId = comment._id;
+  
+      this.commentService.addReply(postId, commentId, replyContent).subscribe(
+        (response) => {
+          iziToast.success({
+            title: 'Succès',
+            message: 'Réponse ajoutée avec succès.',
+            position: 'topRight',
+          });
+          comment.replyText = ''; // Clear the reply input
+          comment.isReplying = false; // Hide reply input box
+          
+          // Ajouter la réponse directement dans le tableau des réponses du commentaire
+          if (!comment.replies) {
+            comment.replies = [];
+          }
+          comment.replies.unshift({
+            userId: {
+              firstName: this.authService.getCurrentUserFirstName(),
+              lastName: this.authService.getCurrentUserLastName(),
+            },
+            content: replyContent,
+            createdAt: new Date().toISOString(),
+          });
+          
+          // Mettre à jour le nombre de réponses dans le commentaire
+          comment.repliesCount = comment.replies.length;
+  
+          // Mettre à jour le nombre total de commentaires pour le post (commentaires + réponses)
+          comment.post.totalCommentsCount = comment.post.commentsCount + comment.replies.length;
+        },
+        (error) => {
+          console.error('Erreur lors de l\'ajout de la réponse', error);
+          iziToast.error({
+            title: 'Erreur',
+            message: 'Erreur lors de l\'ajout de la réponse.',
+            position: 'topRight',
+          });
+        }
+      );
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  toggleReplyBox(comment: any): void {
+    comment.isReplying = !comment.isReplying; // Toggle l'affichage du champ de réponse
+  }
+  
+  onReplyInput(comment: any): void {
+    if (comment.replyText && comment.replyText.length > 0) {
+      comment.isReplying = true;
+    } else {
+      comment.isReplying = false;
+    }
+  }
+  
+  
   
 }

@@ -17,85 +17,124 @@
       </div>
     </div>
 
-    <!-- post publié -->
-    <div class="card mb-3" *ngFor="let post of posts">
-      <div class="card-body">
-        <!-- Avatar et nom de l'utilisateur -->
-        <div class="d-flex align-items-center mb-3">
-          <div class="avatar-container me-3">
-            <img
-              src="https://www.w3schools.com/w3images/avatar2.png"
-              alt="User Avatar"
-              class="avatar-img rounded-circle"
-            />
-          </div>
-          <div>
-            <span class="fw-bold">{{ post.userId.firstName }} {{ post.userId.lastName }}</span>
-          </div>
-        </div>
-    
-        <!-- Contenu du post -->
-        <div class="post-content">
-          <p class="card-text">
-            {{ post.isExpanded ? post.content : (post.content.length > 700 ? post.content.substring(0, 700) : post.content) }}
-            <button
-              *ngIf="post.content.length > 700 && !post.isExpanded"
-              class="btn btn-link p-0"
-              (click)="toggleExpand(post)"
-            >
-              Voir plus
-            </button>
-          </p>
-        </div>
-    
-        <hr />
-    
-        <!-- Actions sous le post (like, commenter) -->
-        <div class="d-flex text-muted">
-          <!-- Bouton Like -->
-          <button
-            class="btn action-btn d-flex align-items-center"
-            (click)="likePost(post)"
-          >
-            <i
-              class="bi"
-              [ngClass]="{
-                'bi-hand-thumbs-up': !post.isLiked,
-                'bi-hand-thumbs-up-fill text-primary': post.isLiked
-              }"
-            ></i>
-            <span>{{ post.likesCount }} Like{{ post.likesCount > 1 ? 's' : '' }}</span>
-          </button>
-    
-          <!-- Bouton Commenter -->
-          <button class="btn action-btn d-flex align-items-center" (click)="toggleCommentBox(post)">
-            <span class="me-1">💬</span>
-            <span>{{ post.commentsCount }} Comment{{ post.commentsCount > 1 ? 's' : '' }}</span>
-          </button>
-        </div>
-    
-<!-- Champ de commentaire -->
-<div *ngIf="post.isCommenting" class="mt-3 position-relative">
-  <textarea
-    class="form-control pe-5" 
-    rows="2"
-    [(ngModel)]="post.commentText"
-    (input)="onCommentInput(post)"
-    placeholder="Écrire un commentaire..."
-  ></textarea>
-  <button
-    *ngIf="post.commentText.length > 0"
-    class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2"
-    (click)="addComment(post)"
-  >
-    Publier
-  </button>
-</div>
+<!-- post publié -->
+<div class="card mb-3" *ngFor="let post of posts">
+  <div class="card-body">
+    <!-- Avatar et nom de l'utilisateur -->
+    <div class="d-flex align-items-center mb-3">
+      <div class="avatar-container me-3">
+        <img
+          src="https://www.w3schools.com/w3images/avatar2.png"
+          alt="User Avatar"
+          class="avatar-img rounded-circle"
+        />
+      </div>
+      <div>
+        <span class="fw-bold">{{ post.userId.firstName }} {{ post.userId.lastName }}</span>
+      </div>
+    </div>
 
-    
-        <!-- Liste des commentaires -->
-        <div *ngIf="post.comments?.length > 0" class="mt-3">
-          <div *ngFor="let comment of post.comments">
+    <!-- Contenu du post -->
+    <div class="post-content">
+      <p class="card-text">
+        {{ post.isExpanded ? post.content : (post.content.length > 700 ? post.content.substring(0, 700) : post.content) }}
+        <button
+          *ngIf="post.content.length > 700 && !post.isExpanded"
+          class="btn btn-link p-0"
+          (click)="toggleExpand(post)"
+        >
+          Voir plus
+        </button>
+      </p>
+    </div>
+
+    <hr />
+
+    <!-- Actions sous le post (like, commenter) -->
+    <div class="d-flex text-muted">
+      <!-- Bouton Like -->
+      <button
+        class="btn action-btn d-flex align-items-center"
+        (click)="likePost(post)"
+      >
+        <i
+          class="bi"
+          [ngClass]="{
+            'bi-hand-thumbs-up': !post.isLiked,
+            'bi-hand-thumbs-up-fill text-primary': post.isLiked
+          }"
+        ></i>
+        <span>{{ post.likesCount }} Like{{ post.likesCount > 1 ? 's' : '' }}</span>
+      </button>
+
+      <!-- Bouton Commenter -->
+      <button class="btn action-btn d-flex align-items-center" (click)="toggleCommentBox(post)">
+        <span class="me-1">💬</span>
+        <span>{{ post.commentsCount }} Comment{{ post.commentsCount > 1 ? 's' : '' }}</span>
+      </button>
+    </div>
+
+    <!-- Champ de commentaire -->
+    <div *ngIf="post.isCommenting" class="mt-3 position-relative">
+      <textarea
+        class="form-control pe-5" 
+        rows="2"
+        [(ngModel)]="post.commentText"
+        (input)="onCommentInput(post)"
+        placeholder="Écrire un commentaire..."
+      ></textarea>
+      <button
+        *ngIf="post.commentText.length > 0"
+        class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2"
+        (click)="addComment(post)"
+      >
+        Publier
+      </button>
+    </div>
+
+<!-- Liste des commentaires -->
+<div *ngIf="post.comments?.length > 0" class="mt-3">
+  <div *ngFor="let comment of post.comments">
+    <div class="d-flex align-items-center mb-3">
+      <img
+        src="https://www.w3schools.com/w3images/avatar2.png"
+        alt="User Avatar"
+        class="avatar-img rounded-circle me-2"
+      />
+      <div class="d-flex flex-column">
+        <div class="d-flex align-items-center mb-2">
+          <span class="fw-bold">
+            {{ comment.userId?.firstName }} {{ comment.userId?.lastName }}
+          </span>
+          <small class="text-muted ms-2">{{ getTimeAgo(comment.createdAt) }}</small>
+        </div>
+        <p>{{ comment.content }}</p>
+      </div>
+    </div>
+
+    <!-- Réponses aux commentaires -->
+    <div *ngIf="comment.replies && comment.replies.length > 0" class="ms-4">
+      <div *ngFor="let reply of comment.replies">
+        <div class="d-flex align-items-center mb-3">
+          <img
+            src="https://www.w3schools.com/w3images/avatar2.png"
+            alt="User Avatar"
+            class="avatar-img rounded-circle me-2"
+          />
+          <div class="d-flex flex-column">
+            <div class="d-flex align-items-center mb-2">
+              <span class="fw-bold">
+                {{ reply.userId?.firstName }} {{ reply.userId?.lastName }}
+              </span>
+              <small class="text-muted ms-2">{{ getTimeAgo(reply.createdAt) }}</small>
+            </div>
+            <p>{{ reply.content }}</p>
+          </div>
+        </div>
+
+        <!-- Affichage des réponses imbriquées -->
+        <div *ngIf="reply.replies?.length > 0" class="ms-4">
+          <div *ngFor="let nestedReply of reply.replies">
             <div class="d-flex align-items-center mb-3">
               <img
                 src="https://www.w3schools.com/w3images/avatar2.png"
@@ -105,21 +144,48 @@
               <div class="d-flex flex-column">
                 <div class="d-flex align-items-center mb-2">
                   <span class="fw-bold">
-                    {{ comment.userId?.firstName }} {{ comment.userId?.lastName }}
+                    {{ nestedReply.userId?.firstName }} {{ nestedReply.userId?.lastName }}
                   </span>
-                  <small class="text-muted ms-2">{{ getTimeAgo(comment.createdAt) }}</small>
+                  <small class="text-muted ms-2">{{ getTimeAgo(nestedReply.createdAt) }}</small>
                 </div>
-                <p>{{ comment.content }}</p>
+                <p>{{ nestedReply.content }}</p>
               </div>
             </div>
           </div>
-          
         </div>
-               
       </div>
     </div>
-    
-    
+
+    <!-- Champ de réponse -->
+    <div *ngIf="comment.isReplying" class="ms-4 mt-3 position-relative">
+      <textarea
+        class="form-control pe-5"
+        rows="2"
+        [(ngModel)]="comment.replyText"
+        (input)="onReplyInput(comment)"
+        placeholder="Répondre à ce commentaire..."
+      ></textarea>
+      <button
+        *ngIf="comment.replyText && comment.replyText.length > 0"
+        class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2"
+        (click)="addReply(comment)"
+      >
+        Publier
+      </button>
+    </div>
+
+    <!-- Bouton Répondre -->
+    <button class="btn btn-link p-0 ms-4" (click)="toggleReplyBox(comment)">
+      Répondre
+    </button>
+  </div>
+</div>
+
+
+
+  </div>
+</div>
+
     <br>
     
   </div>

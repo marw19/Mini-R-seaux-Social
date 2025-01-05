@@ -26,5 +26,13 @@ export class CommentService {
   getComments(postId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${postId}/comments`);
   }
+  addReply(postId: string, commentId: string, content: string) {
+    return this.http.post<any>(`${this.apiUrl}/${postId}/comments/${commentId}/reply`, { content });
+  }
+  getReplies(postId: string, commentId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${postId}/comments/${commentId}/replies`);
+  }
+  
+  
 
 }

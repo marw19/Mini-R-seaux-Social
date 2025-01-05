@@ -33,10 +33,9 @@ export class HomeComponent implements OnInit {
   loadPosts(): void {
     this.postService.getPosts().subscribe(
       (response) => {
-        // Récupérer l'ID de l'utilisateur connecté
-        const currentUserId = this.getCurrentUserId(); // Par exemple, depuis un service d'authentification
-        
-        // Ajoute un champ 'isExpanded' et 'isLiked' pour chaque post
+        const currentUserId = this.getCurrentUserId(); // Get current user ID from auth service
+  
+        // Add extra fields and initialize comment-related fields
         this.posts = response.posts.map(post => ({
           ...post,
           content: post.content || '',
@@ -44,34 +43,49 @@ export class HomeComponent implements OnInit {
           isCommenting: false,
           commentText: '',
           comments: [],
-          isLiked: post.likes && post.likes.includes(currentUserId) // Vérifier si l'utilisateur a liké ce post
+          commentsCount: 0,  // Initialize commentsCount
+          isLiked: post.likes && post.likes.includes(currentUserId) // Check if user liked the post
         }));
+  
+        // Optionally, load comments for each post after they are fetched
+        this.posts.forEach(post => {
+          this.loadComments(post);  // Load comments for each post
+        });
       },
       (error) => {
-        console.error('Erreur lors de la récupération des posts', error);
+        console.error('Error fetching posts', error);
       }
     );
   }
+  
 
   loadComments(post: any): void {
     this.commentService.getComments(post._id).subscribe(
       (response) => {
+        // Initialize the comments array if it's not already initialized
         post.comments = response.comments || [];
-        post.commentsCount = post.comments.length || 0;
-      
-        // Charger les réponses pour chaque commentaire
+  
+        // Ensure commentsCount is initialized
+        post.commentsCount = post.comments.length;
+  
+        // Load replies for each comment
         post.comments.forEach(comment => {
           this.loadReplies(post._id, comment);
         });
-      
-        // Recalculez le nombre total de commentaires et réponses
-        post.totalCommentsCount = post.commentsCount + post.comments.reduce((sum, comment) => sum + (comment.replies ? comment.replies.length : 0), 0);
+  
+        // Recalculate total comments and replies
+        post.totalCommentsCount = post.commentsCount + post.comments.reduce(
+          (sum, comment) => sum + (comment.replies ? comment.replies.length : 0),
+          0
+        );
       },
       (error) => {
         console.error('Erreur lors de la récupération des commentaires', error);
       }
     );
   }
+  
+  
   
   
   
